@@ -1,0 +1,20 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Build frontend image
+        run: docker build -t dockerlearning-frontend ./FrontendApp
+
+      - name: Build backend image
+        run: docker build -t dockerlearning-backend ./BackendApi

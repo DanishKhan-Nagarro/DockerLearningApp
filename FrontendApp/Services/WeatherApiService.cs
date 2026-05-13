@@ -14,7 +14,7 @@ public class WeatherApiService
     public async Task<IEnumerable<WeatherForecast>?> GetWeatherForecastAsync()
     {
         return await _httpClient.GetFromJsonAsync<IEnumerable<WeatherForecast>>(
-            "http://localhost:5102/weatherforecast");
+            "http://backendapi:8080/weatherforecast");
     }
 }
 
