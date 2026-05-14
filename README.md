@@ -2,16 +2,17 @@
 
 ## Overview
 
-This project demonstrates containerization of .NET applications using Docker and Docker Compose.
+This project demonstrates containerization of ASP.NET Core applications using Docker and Docker Compose.
 
 The solution contains:
 - ASP.NET Core MVC frontend application
 - ASP.NET Core Web API backend application
+- A simple Tasks page for basic create and read operations
 - Dockerfiles for both applications
 - Docker Compose configuration for multi-container setup
 - Private Docker registry implementation
 
-The frontend application consumes data from the backend API using Docker container networking.
+The frontend application displays weather data from the backend API and also provides a Tasks page for adding and viewing task items. Task data is persisted using SQLite.
 
 ---
 
@@ -20,6 +21,7 @@ The frontend application consumes data from the backend API using Docker contain
 - .NET 10
 - ASP.NET Core MVC
 - ASP.NET Core Web API
+- SQLite
 - Docker
 - Docker Compose
 
@@ -36,12 +38,15 @@ DockerLearningApp
 │
 ├── FrontendApp
 │   ├── Controllers
+│   ├── Models
 │   ├── Services
 │   ├── Views
 │   ├── Dockerfile
 │   └── FrontendApp.csproj
 │
 ├── BackendApi
+│   ├── Data
+│   ├── Models
 │   ├── Dockerfile
 │   └── BackendApi.csproj
 │
@@ -53,10 +58,12 @@ DockerLearningApp
 ## Applications
 
 ### FrontendApp
-ASP.NET Core MVC application that displays weather forecast data received from the backend API.
+
+ASP.NET Core MVC application that displays weather forecast data received from the backend API and provides a Tasks page for basic task management.
 
 ### BackendApi
-ASP.NET Core Web API application that provides weather forecast data.
+
+ASP.NET Core Web API application that provides weather forecast data and simple task API endpoints.
 
 ---
 
@@ -78,6 +85,32 @@ docker --version
 docker compose version
 docker run hello-world
 ```
+
+---
+
+## Run the Application Locally
+
+### Backend Application
+
+```bash
+cd BackendApi
+dotnet run
+```
+
+### Frontend Application
+
+Open a new terminal:
+
+```bash
+cd FrontendApp
+dotnet run
+```
+
+### Local URLs
+
+- Frontend Application: http://localhost:5117
+- Backend API: http://localhost:5102/weatherforecast
+- Tasks Page: http://localhost:5117/Tasks
 
 ---
 
@@ -177,21 +210,11 @@ docker compose up -d --build
 docker compose down
 ```
 
----
+### Docker URLs
 
-## Application URLs
-
-Frontend Application:
-
-```text
-http://localhost:8081
-```
-
-Backend API:
-
-```text
-http://localhost:8082/weatherforecast
-```
+- Frontend Application: http://localhost:8081
+- Backend API: http://localhost:8082/weatherforecast
+- Tasks Page: http://localhost:8081/Tasks
 
 ---
 
@@ -229,11 +252,17 @@ sudo docker pull localhost:5001/dockerlearning-frontend:v1
 sudo docker pull localhost:5001/dockerlearning-backend:v1
 ```
 
+### Registry URL
+
+- Private Docker Registry: http://localhost:5001/v2/_catalog
+
 ---
 
 ## CI/CD Configuration
 
-This repository includes a GitHub Actions workflow (`.github/workflows/docker-build.yml`). It is configured to automatically trigger on pushes to the `main` branch to verify that both the Frontend and Backend Docker images build successfully.
+This repository includes a GitHub Actions workflow located at `.github/workflows/docker-build.yml`. It is configured to trigger on pushes to the `main` branch and verify that both Docker images build successfully.
+
+---
 
 ## Frontend Dockerfile
 
@@ -263,6 +292,8 @@ EXPOSE 8080
 ENTRYPOINT ["dotnet", "FrontendApp.dll"]
 ```
 
+---
+
 ## Backend Dockerfile
 
 ```dockerfile
@@ -291,6 +322,8 @@ EXPOSE 8080
 ENTRYPOINT ["dotnet", "BackendApi.dll"]
 ```
 
+---
+
 ## Docker Compose File
 
 ```yaml
@@ -316,6 +349,8 @@ services:
       - "8082:8080"
 ```
 
+---
+
 ## Key Learnings
 
 This project helped in understanding:
@@ -327,6 +362,7 @@ This project helped in understanding:
 - Multi-container applications using Docker Compose
 - Container communication using service names
 - Docker image push and pull operations using a private registry
+- Lightweight database-backed task management using SQLite
 
 ---
 
@@ -347,7 +383,8 @@ This project helped in understanding:
 | Private Docker Registry | Completed |
 | Push/Pull Docker Images | Completed |
 | README Documentation | Completed |
+| Database-backed enhancement | Completed |
 
-#  Author
+# Author
 
 **Danish Khan**
