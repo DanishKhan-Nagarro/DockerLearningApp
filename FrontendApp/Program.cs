@@ -3,8 +3,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<WeatherApiService>();
 
+var backendApiUrl =
+    builder.Configuration["BackendApiUrl"]
+    ?? "http://localhost:5102/";
+
+builder.Services.AddHttpClient<WeatherApiService>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(backendApiUrl);
+    });
+
+builder.Services.AddHttpClient(
+    "BackendApi",
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(backendApiUrl);
+    });
+    
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,7 +33,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();

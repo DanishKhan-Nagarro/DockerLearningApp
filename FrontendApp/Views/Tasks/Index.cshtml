@@ -1,0 +1,52 @@
+@model IEnumerable<FrontendApp.Models.TaskItem>
+
+<div class="text-center">
+    <h1 class="display-4">
+        Task Tracker
+    </h1>
+
+    <p>
+        Database integration
+        using Docker Compose
+    </p>
+
+    <div class="card my-4 p-4 mx-auto"
+         style="max-width:500px;">
+
+        <form asp-action="AddTask"
+              method="post"
+              class="d-flex">
+
+            <input type="text"
+                   name="title"
+                   class="form-control me-2"
+                   placeholder="Enter task"
+                   required />
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Add Task
+            </button>
+        </form>
+    </div>
+
+    <ul class="list-group mx-auto"
+        style="max-width:500px;">
+
+        @if (Model.Any())
+        {
+            foreach (var task in Model)
+            {
+                <li class="list-group-item text-start">
+                    @task.Title
+                </li>
+            }
+        }
+        else
+        {
+            <li class="list-group-item text-muted">
+                No tasks available
+            </li>
+        }
+    </ul>
+</div>
