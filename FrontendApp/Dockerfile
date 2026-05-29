@@ -1,3 +1,4 @@
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 WORKDIR /src
@@ -8,14 +9,21 @@ RUN dotnet restore "FrontendApp.csproj"
 
 COPY . .
 
-RUN dotnet publish "FrontendApp.csproj" -c Release -o /app/publish
+RUN dotnet publish "FrontendApp.csproj" \
+    -c Release \
+    -o /app/publish \
+    /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
 WORKDIR /app
 
 COPY --from=build /app/publish .
 
+RUN mkdir -p /app/data && chown -R app /app
+
+USER app
 
 ENV ASPNETCORE_URLS=http://+:8080
 

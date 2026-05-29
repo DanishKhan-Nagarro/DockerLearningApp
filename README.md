@@ -11,6 +11,14 @@ The solution contains:
 - Dockerfiles for both applications
 - Docker Compose configuration for multi-container setup
 - Private Docker registry implementation
+- SQLite database integration
+- Multi-stage Docker builds
+- Custom Docker network
+- Named Docker volumes
+- Bind mounts
+- Docker security best practices
+- Private Docker registry
+- CI/CD pipeline using GitHub Actions
 
 The frontend application displays weather data from the backend API and also provides a Tasks page for adding and viewing task items. Task data is persisted using SQLite.
 
@@ -24,6 +32,10 @@ The frontend application displays weather data from the backend API and also pro
 - SQLite
 - Docker
 - Docker Compose
+- Docker Networks
+- Docker Volumes
+- Docker Security Best Practices
+- Docker Bench Security
 
 ---
 
@@ -350,6 +362,17 @@ services:
 ```
 
 ---
+
+## Security Enhancements
+
+The application implements several Docker security best practices:
+
+- Containers run as a non-root user using USER app
+- Read-only bind mounts used for secret files
+- Least privilege container execution
+- Multi-stage builds reduce attack surface
+- Docker image inspection and validation performed
+- Docker Bench Security audit executed
 
 ## Key Learnings
 

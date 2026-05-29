@@ -1,22 +1,39 @@
 services:
+
   backendapi:
     build:
       context: ./BackendApi
       dockerfile: Dockerfile
-    image: dockerlearning-backend
-    container_name: backend-container
+    image: dockerlearning-backend:advanced
+    container_name: advanced-backend
     ports:
       - "8082:8080"
+    networks:
+      - advanced-network
+    volumes:
+      - task-data-volume:/app/data
+      - ./config:/app/secrets:ro
 
   frontendapp:
     build:
       context: ./FrontendApp
       dockerfile: Dockerfile
-    image: dockerlearning-frontend
-    container_name: frontend-container
+    image: dockerlearning-frontend:advanced
+    container_name: advanced-frontend
     ports:
       - "8081:8080"
     depends_on:
       - backendapi
     environment:
       - BackendApiUrl=http://backendapi:8080/
+    networks:
+      - advanced-network
+
+networks:
+  advanced-network:
+    external: true
+    name: advanced-assignment-network
+
+volumes:
+  task-data-volume:
+    external: true
